@@ -9,4 +9,8 @@
     <string name="timeOfEvent">timeOfEvent:</string>
     <string name="cep">CEP:</string>
     <string name="send">Enviar</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="update">Atualizar</string>
+    <string name="url">URL:</string>
 </resources>

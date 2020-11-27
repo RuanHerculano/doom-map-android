@@ -1,6 +1,7 @@
 package com.e.doommap;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,7 +34,7 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.content_main, container, false);
         context = getContext();
 
@@ -48,7 +50,9 @@ public class ListFragment extends Fragment {
             }
         });
 
-        new ListTask().execute();
+        SharedPreferences sharedPref = context.getSharedPreferences("profile", Context.MODE_PRIVATE);
+        String url = sharedPref.getString("url", "http://localhost:8080");
+        new ListTask().execute(url+"/api/reports");
 
         return rootView;
     }
@@ -59,16 +63,19 @@ public class ListFragment extends Fragment {
         protected ResponseEntity<String> doInBackground(String... urls) {
             RequestCreator creator;
             creator = new RequestCreator();
-            creator.url = "http://192.168.0.22:8080/api/reports";
+            creator.url = urls[0];
             return creator.getRequest(HttpMethod.GET, context);
         }
 
         @Override
         protected void onPostExecute(ResponseEntity<String> r) {
-            System.out.println("RESPONSE: "+r.getBody());
-            gridView.setAdapter(new ListAdapter(context, data2list(r.getBody())));
-            gridView.setLayoutManager(new LinearLayoutManager(context));
-            gridView.setNestedScrollingEnabled(false);
+            try {
+                gridView.setAdapter(new ListAdapter(context, data2list(r.getBody())));
+                gridView.setLayoutManager(new LinearLayoutManager(context));
+                gridView.setNestedScrollingEnabled(false);
+            } catch (Exception e) {
+                Toast.makeText(context, "Não foi possível executar a operação", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -86,7 +93,6 @@ public class ListFragment extends Fragment {
                 main_list.add(list);
             }
         } catch(Exception e) { e.printStackTrace(); }
-        System.out.println("RESPONSE JSON: "+main_list);
         return main_list;
     }
 }

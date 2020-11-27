@@ -1,5 +1,8 @@
 <resources>
     <dimen name="fab_margin">10dp</dimen>
     <dimen name="add_margin">30dp</dimen>
-    <dimen name="edittext_height">30dp</dimen>
+    <dimen name="edittext_width">80dp</dimen>
+    <dimen name="edittext_height">25dp</dimen>
+    <dimen name="edittext_left">15dp</dimen>
+    <dimen name="edittext_top">5dp</dimen>
 </resources>

@@ -28,9 +28,6 @@ public class RequestCreator {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        JSONArray arr = new JSONArray();
-        arr.put(json);
-        System.out.println("JSON: " + arr);
         HttpEntity<String> entity = new HttpEntity<>("", headers);
 
         RestTemplate template = new RestTemplate();
@@ -38,10 +35,7 @@ public class RequestCreator {
 
         try {
             return template.exchange(url, method, entity, String.class);
-        } catch (HttpStatusCodeException e) {
-            System.out.println(e.getStatusCode());
-            System.out.println(e.getResponseBodyAsString());
-            Toast.makeText(context, "Erro ao realizar operação", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
             return null;
         }
     }
@@ -65,7 +59,26 @@ public class RequestCreator {
         } catch (HttpStatusCodeException e) {
             System.out.println(e.getStatusCode());
             System.out.println(e.getResponseBodyAsString());
-            Toast.makeText(context, "Erro ao realizar operação", Toast.LENGTH_LONG).show();
+            return null;
+        }
+    }
+
+    public ResponseEntity<String> deleteRequest(HttpMethod method, Context context){
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> entity = new HttpEntity<>("", headers);
+
+        RestTemplate template = new RestTemplate();
+        template.getMessageConverters().add(new StringHttpMessageConverter());
+
+        try {
+            return template.exchange(url, method, entity, String.class);
+        } catch (HttpStatusCodeException e) {
+            System.out.println(e.getStatusCode());
+            System.out.println(e.getResponseBodyAsString());
             return null;
         }
     }
